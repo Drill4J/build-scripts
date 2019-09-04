@@ -1,7 +1,7 @@
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
-apply from: 'https://gist.githubusercontent.com/IgorKey/b78e348157cbaf7e9446e62ca0af7208/raw/4ef85dd453e1dbd419a0686c8a4a8f5a811b1ee1/pom.xml'
+apply from: 'https://raw.githubusercontent.com/Drill4J/build-scripts/master/pom.xml'
 
 task stubSources(type: Jar) {
     classifier = 'sources'
