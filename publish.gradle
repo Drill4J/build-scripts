@@ -1,0 +1,71 @@
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+apply from: 'https://gist.githubusercontent.com/IgorKey/b78e348157cbaf7e9446e62ca0af7208/raw/4ef85dd453e1dbd419a0686c8a4a8f5a811b1ee1/pom.xml'
+
+task stubSources(type: Jar) {
+    classifier = 'sources'
+}
+
+task stubJavadoc(type: Jar) {
+    classifier = 'javadoc'
+}
+
+task emptyJar(type: Jar) {
+}
+
+publishing {
+    repositories {
+        maven {
+            if(project.version.endsWith('-SNAPSHOT')) {
+              url = uri("http://oss.jfrog.org/oss-snapshot-local")
+            } else {
+              url = uri("http://oss.jfrog.org/oss-release-local")
+            }
+            credentials {
+                username project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+                password project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+            }
+        }
+    }
+    publications.all {
+        pom.withXml(configureMavenCentralMetadata)
+
+        def type = it.name
+        switch (type) {
+            case 'kotlinMultiplatform':
+                task sourcesJar(type: Jar) {
+                    classifier 'sources'
+                    from kotlin.sourceSets.commonMain.kotlin
+                }
+
+                it.artifactId = "$project.name-native"
+                it.artifact emptyJar
+                it.artifact stubJavadoc
+                it.artifact sourcesJar
+                break
+            case 'metadata':
+                it.artifactId = "$project.name"
+                break
+            case 'jvm':
+            case 'js':
+            case 'native':
+                it.artifactId = "$project.name-$type"
+                break
+        }
+    }
+
+    kotlin.targets.all { target ->
+        def publication = publishing.publications.findByName(target.name)
+
+        if (publication != null) {
+            publication.artifact stubJavadoc
+
+            if (target.platformType.name != 'native') {
+                publication.moduleDescriptorGenerator = null
+            } else {
+                publication.artifact emptyJar
+            }
+        }
+    }
+}
