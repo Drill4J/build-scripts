@@ -20,7 +20,7 @@ publishing {
             if(project.version.endsWith('-SNAPSHOT')) {
               url = uri("http://oss.jfrog.org/oss-snapshot-local")
             } else {
-              url = uri("http://oss.jfrog.org/oss-release-local")
+              url = uri("https://dl.bintray.com/drill/drill4j")
             }
             credentials {
                 username project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
