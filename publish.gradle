@@ -17,7 +17,7 @@ task emptyJar(type: Jar) {
 publishing {
     repositories {
         maven {
-            if(project.version.endsWith('-SNAPSHOT')) {
+            if(project.version.toString().endsWith('-SNAPSHOT')) {
               url = uri("http://oss.jfrog.org/oss-snapshot-local")
             } else {
               url = uri("http://oss.jfrog.org/oss-release-local")
