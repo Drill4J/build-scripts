@@ -1,4 +1,5 @@
-val mavenRepo: String by extra("https://oss.jfrog.org/oss-release-local")
+val mavenRepo: String = extra.properties["mavenRepo"] as? String
+    ?: "https://oss.jfrog.org/oss-release-local"
 
 repositories {
     maven(url = mavenRepo)
