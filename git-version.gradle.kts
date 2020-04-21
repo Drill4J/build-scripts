@@ -1,7 +1,7 @@
   
 import java.io.*
 
-if (version == Project.DEFAULT_VERSION && file(".git").exists()) {
+if (version == Project.DEFAULT_VERSION && rootProject.file(".git").exists()) {
     val tagPattern = "v[0-9]*.[0-9]*.[0-9]*"
     val abbrevRegex = "-(\\d+)-g([0-9a-f]+)$".toRegex()
     version = ByteArrayOutputStream().let { output ->
