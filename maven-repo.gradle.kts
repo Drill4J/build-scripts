@@ -5,10 +5,12 @@ repositories {
     maven(url = mavenRepo)
 }
 
-extensions.findByType<PublishingExtension>()?.repositories {
-    maven(url = mavenRepo).credentials {
-        username = project.propOrEnv("bintrayUser", "BINTRAY_USER")
-        password = project.propOrEnv("bintrayApiKey", "BINTRAY_API_KEY")
+pluginManager.withPlugin("org.gradle.maven-publish") {
+    the<PublishingExtension>().repositories {
+        maven(url = mavenRepo).credentials {
+            username = project.propOrEnv("bintrayUser", "BINTRAY_USER")
+            password = project.propOrEnv("bintrayApiKey", "BINTRAY_API_KEY")
+        }
     }
 }
 
