@@ -1,15 +1,15 @@
+val mavenRepo: String by extra("https://oss.jfrog.org/oss-release-local")
+
 repositories {
-    ossReleaseRepo()
+    maven(url = mavenRepo)
 }
 
 extensions.findByType<PublishingExtension>()?.repositories {
-    ossReleaseRepo().credentials {
+    maven(url = mavenRepo).credentials {
         username = project.propOrEnv("bintrayUser", "BINTRAY_USER")
         password = project.propOrEnv("bintrayApiKey", "BINTRAY_API_KEY")
     }
 }
-
-fun RepositoryHandler.ossReleaseRepo() = maven(url = "https://oss.jfrog.org/oss-release-local")
 
 fun Project.propOrEnv(prop: String, env: String): String? = run {
     findProperty(prop)?.toString() ?: System.getenv(env)
