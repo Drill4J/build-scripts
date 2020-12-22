@@ -1,5 +1,10 @@
 if (version == Project.DEFAULT_VERSION) {
-    version = fromEnv() ?: fromGit() ?: version
+    version = rootProject.run {
+        val propName = "gitVersion"
+        extra.properties[propName] ?: run {
+            fromEnv() ?: fromGit() ?: version
+        }.also { extra[propName] = it }
+    }
 }
 
 fun fromEnv(): String? = System.getenv("GITHUB_REF")?.let {
