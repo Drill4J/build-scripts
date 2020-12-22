@@ -7,7 +7,7 @@ fun fromEnv(): String? = System.getenv("GITHUB_REF")?.let {
 }?.groupValues?.get(1)
 
 fun Project.fromGit(): String? = takeIf { rootDir.resolve(".git").isDirectory }?.run {
-    val output = ByteArrayOutputStream()
+    val output = java.io.ByteArrayOutputStream()
     exec {
         val tagPattern = "v[0-9]*.[0-9]*.[0-9]*"
         commandLine("git", "describe", "--tags", "--long", "--match", tagPattern)
