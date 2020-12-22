@@ -13,7 +13,7 @@ fun Project.fromGit(): String? = takeIf { rootDir.resolve(".git").isDirectory }?
         commandLine("git", "describe", "--tags", "--long", "--match", tagPattern)
         standardOutput = output
         isIgnoreExitValue = true
-    }.run { exitValue == 0 }
+    }.takeIf { it.exitValue == 0 }
         ?.let {
             val abbrevRegex = "-(\\d+)-g([0-9a-f]+)$".toRegex()
             "$output".run {
